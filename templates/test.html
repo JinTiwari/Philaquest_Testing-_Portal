@@ -1,0 +1,244 @@
+{% extends 'basedash.html' %} {% block Body %}
+{% if not Questions%} 
+<div class = "container">
+    <br><br><br>
+Please select the test You wish to take out of the options available!
+<br>
+<form action="taketest" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+    <label for="DisplayText" class="form-label">Select Your test </label>
+</div>
+<div class="mb-3 row">
+    {% for i , j in Compacted %}
+    <div class="radioLeft">
+        <input class="form-check-input" type="radio" name="Test Name" id="TestOption" value={{i}} />
+        <label class="form-check-label" for="TestOption">
+            {{j}}
+        </label>
+    </div>
+    {% endfor %}
+</div>
+<div class="mb-3">
+    <button type="submit" name = "TakeTestButton" class="btn btn-primary">Take Test</button>
+</div>
+</form>
+</div>
+{% endif %}
+
+{% if length %}
+<h1 align="center">All The Best!</h1>
+<div class="container">
+    <form action="submitTest" method="post">
+        {% csrf_token %} {% for i in Questions %}
+        
+        <hr>
+        <div class="bg-light  p-2" style="--bs-bg-opacity: 0.5">
+            <div class="mb-3 row">
+                <label for="FormQuesTion" class="col-sm-2 col-form-label">Question {{i.questNo}}</label>
+                <div class="col-sm-10"><strong>{{i.ques_tion | safe}}</strong></div>
+                {% if i.Ques_image %}
+                <div class="col-sm-10"><img src="/media/{{i.Ques_image}}" alt="Image"></div>
+                {% endif %}
+            </div>
+            <div class="mb-3 row">
+                <div class="radioLeft">
+                    <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt1" />
+                    <label class="form-check-label" for="FormOptions">
+                        {{i.option1 | safe}}
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="radioLeft">
+                    <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt2" />
+                    <label class="form-check-label" for="FormOptions">
+                        {{i.option2 | safe}}
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="radioLeft">
+                    <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt3" />
+                    <label class="form-check-label" for="FormOptions">
+                        {{i.option3 | safe}}
+                    </label>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="radioLeft">
+                    <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt4" />
+                    <label class="form-check-label" for="FormOptions">
+                        {{i.option4 | safe}}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr />
+        {% endfor %}
+        <button type="submit" name= "submitTestButton" class="btn btn-success" value = {{name}}>Submit Test</button>
+    </form>
+    <br /><br /><br /><br />
+
+</div>
+{% endif %}
+{% if Compact %}
+<div class="container">
+    {% for i , j in Compact %} 
+    <hr >
+    {% if  i.CorrectOption == j %}  
+    <div class="bg-success p-2" style="--bs-bg-opacity: 0.25">
+        {% comment %} {% elif j == 'None'%} {% endcomment %}
+        {% comment %} {% else %} {% endcomment %}
+    {% else %}
+        {% if j == 'None' %}
+            <div class="bg-warning p-2" style="--bs-bg-opacity: 0.25">
+            {% else %}
+            <div class="bg-danger p-2" style="--bs-bg-opacity: 0.25">
+        {% endif %}
+    {% endif %}
+        <div class="mb-3 row">
+            <label for="FormQuesTion" class="col-sm-2 col-form-label">Question {{i.questNo}}</label>
+            <div class="col-sm-10"><strong>{{i.ques_tion | safe}}</strong></div>
+            
+        </div>
+        {% if j == "Opt1" %}
+            {% if i.CorrectOption == "Opt1" %}
+            <div class="mb-3 row bg-success">
+                {% else %}
+                    <div class="mb-3 row bg-danger">
+            {% endif %}
+        {% else %}
+            {% if i.CorrectOption == "Opt1" %}
+        
+                <div class="mb-3 row bg-success">
+                {% else %}
+                    <div class="mb-3 row">
+            {% endif %}
+        {% endif %}
+            
+            <div class="radioLeft">
+                {% comment %} <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt1" /> {% endcomment %}
+                <label class="form-check-label" for="FormOptions">
+                    {{i.option1 | safe}}
+                </label>
+            </div>
+        </div>
+        {% if j == "Opt2" %}
+        {% if i.CorrectOption == "Opt2" %}
+        <div class="mb-3 row bg-success">
+        {% else %}
+        <div class="mb-3 row bg-danger">
+            {% endif %}
+            {% else %}
+            {% if i.CorrectOption == "Opt2" %}
+        
+            <div class="mb-3 row bg-success">
+                {% else %}
+            <div class="mb-3 row">
+            {% endif %}
+            {% endif %}
+            <div class="radioLeft">
+                {% comment %} <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt2" /> {% endcomment %}
+                <label class="form-check-label" for="FormOptions">
+                    {{i.option2 | safe}}
+                </label>
+            </div>
+        </div>
+        {% if j == "Opt3" %}
+        {% if i.CorrectOption == "Opt3" %}
+        <div class="mb-3 row bg-success">
+        {% else %}
+        <div class="mb-3 row bg-danger">
+            {% endif %}
+            {% else %}
+            {% if i.CorrectOption == "Opt3" %}
+        
+            <div class="mb-3 row bg-success">
+                {% else %}
+            <div class="mb-3 row">
+            {% endif %}
+            {% endif %}
+            <div class="radioLeft">
+                {% comment %} <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt3" /> {% endcomment %}
+                <label class="form-check-label" for="FormOptions">
+                    {{i.option3 | safe}}
+                </label>
+            </div>
+        </div>
+        {% if j == "Opt4" %}
+        {% if i.CorrectOption == "Opt4" %}
+        <div class="mb-3 row bg-success">
+        {% else %}
+        <div class="mb-3 row bg-danger">
+            {% endif %}
+            {% else %}
+            {% if i.CorrectOption == "Opt4" %}
+        
+            <div class="mb-3 row bg-success">
+                {% else %}
+            <div class="mb-3 row">
+            {% endif %}
+            {% endif %}
+            <div class="radioLeft">
+                {% comment %} <input class="form-check-input" type="radio" name="{{i.questNo}}" id="FormOptions" value="Opt4" /> {% endcomment %}
+                <label class="form-check-label" for="FormOptions">
+                    {{i.option4 | safe}}
+                </label>
+            </div>
+        </div>
+    </div>
+    <hr />
+    {% endfor %}
+</div>
+<br>
+<div class="container">
+    <form action="results" method="post">
+        {% csrf_token %}
+    <button type="button" name ="TestName" value={{name}} class="btn btn-primary">Go to results</button>
+</form>
+  </div>
+    <br /><br /><br /><br />
+
+{% endif%}
+{% endblock Body %}
+
+{% block extraBody %}
+{% if Compact %}
+<div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body bg-success">
+          <h5 class="card-title">Correct Answers</h5>
+          <p class="card-text">{{NumberOfCorrect}}</p>
+          {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body bg-danger">
+          <h5 class="card-title">Incorrect Answers</h5>
+          <p class="card-text">{{NumberOfIncorrect}}</p>
+          {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body bg-warning">
+          <h5 class="card-title">Not Answered</h5>
+          <p class="card-text">{{NotAnswered}}</p>
+          {% comment %} <a href="#" class="btn btn-primary">Go somewhere</a> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+<form action="results" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary" name="TestName" value={{name}}>Go to results</button>
+</form>
+  </div>
+{% endif%}
+{% endblock extraBody %}
